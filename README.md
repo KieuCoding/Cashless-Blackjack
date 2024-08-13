@@ -2,5 +2,4 @@
 "# Cashless-Blackjack" 
 "# Cashless-Blackjack" 
 "# Cashless-Blackjack" 
-"# OpenCV-USB-Picture-Taker" 
-"# OpenCV-USB-Picture-Taker" 
+
