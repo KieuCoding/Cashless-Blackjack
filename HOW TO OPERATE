@@ -1,0 +1,7 @@
+1.) Have Python version >=3.8 installed
+2.) PIP install both time and random library if not installed
+3.) Run the code on any terminal by using command 'Python GamePractice.py'
+4.) Read the instruction prompted by the game
+
+* If I feel like it, I will add comments to the code to help any new python coders understand how this program works.
+* feel free to use or modify this code to your liking!
