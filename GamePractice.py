@@ -7,6 +7,7 @@ import time
 
 class deck:
     def __init__(self):
+        # initialize deck
         self.cards = [
             2, 2, 2, 2, 3, 3, 3, 3, 4, 4, 4, 4,
             5, 5, 5, 5, 6, 6, 6, 6, 7, 7, 7, 7,
@@ -15,25 +16,28 @@ class deck:
             14, 14, 14, 14
         ]
 
+    # user fuction to determine shuffle action
     def answer(self, user):
         # .lower() is used for letter casing comparison
         if user.lower() in ["yes", "y"]:
             return True
         else:
             return False
-
+            
+    # function to shuffle the deck
     def shuffle(self, user):
         if user:
             random.shuffle(self.cards)
         return self.cards
 
-
+#_____________________________________blackjack game__________________________________________
 class game:
     def __init__(self):
         self.deck = deck()
         self.player = []
         self.dealer = []
 
+    # function to set up the game on first dealing
     def first_dealing(self):
         user_input = input("shuffle?(Yes/No)\ntype y or n : ")
         user = self.deck.answer(user_input)
@@ -52,6 +56,7 @@ class game:
         print("\nDealer's deck: [", dealer[0], ", face down ]")
         return shuffle_deck, player, dealer
 
+    # function to detemine player action
     def PlayerAction(self, shuffle_deck, player, flag, surrender):
         hand_one = []
         hand_two = []
@@ -81,6 +86,7 @@ class game:
             surrender = 1
         return flag, surrender, hand_one, hand_two, player, shuffle_deck, user
 
+    # function to handle player's split hands
     def split_hands(self, hand_one, hand_two, shuffle_deck):
         choice = int(input("\nWhich hand do you want to use?\nType 1 or 2: "))
         Next = 0
@@ -115,6 +121,7 @@ class game:
                     choice = 1
         return flag, hand_one, hand_two, choice, shuffle_deck
 
+    # function to handle dealer's behavior
     def DealerAction(self, shuffle_deck, dealer):
         dealer_sum = sum(dealer)
         if dealer_sum >= 17:
@@ -124,6 +131,7 @@ class game:
             shuffle_deck.pop(0)
         return dealer_sum, dealer, shuffle_deck
 
+    # function to determine win or lose scenario
     def WinLose(self, user, flag, surrender, dealer_sum, player, hand_one, hand_two):
         if surrender == 1 or dealer_sum == 21:
             print("YOU LOSE!")
@@ -177,23 +185,29 @@ def test():
 
 #_______________________________MAIN FUNCTION_____________________________
 def main():
+    # Main menu UI
     start = int(input("\nWelcome to Cashless Blackjack!\n\n1.)start\n2.)Exit\nPlease type 1 or 2:"))
     if start == 2:
         print("Exiting Game...")
         time.sleep(5)
         raise SystemExit
+    # When player starts the game
     while True:
         black = game()
+        # intialize the player's conditions
         user, surrender, flag = 0, 0, 0
         shuffle_deck, player, dealer = black.first_dealing()
         hand_one, hand_two = [], []
+        # games goes on if player does not double down or surrender
         while flag == 0 and surrender == 0:
+            # if player does not split hand
             if user != 3:
                 flag, surrender, hand_one, hand_two, player, shuffle_deck, user = black.PlayerAction(shuffle_deck, player, flag, surrender)
                 if hand_one != []:
                     print("player:", hand_one, hand_two)
                 elif hand_one == []:
                     print("player's total:", sum(player),"\nplayer's deck: ", player)
+            # if player split hand
             elif user == 3:
                 flag, hand_one, hand_two, choice, shuffle_deck = black.split_hands(hand_one, hand_two, shuffle_deck)
                 if choice == 2:
@@ -202,6 +216,7 @@ def main():
                     print("hand one's total:", sum(hand_one),"\nhand one's deck", hand_one)
             dealer_sum, dealer, shuffle_deck = black.DealerAction(shuffle_deck, dealer)
             print("n\ndealer's hands:", dealer[0], "Face Down")
+            # check if win or lose condition met
             flag = black.WinLose(user, flag, surrender, dealer_sum, player, hand_one, hand_two)
             if flag == 1 or surrender == 1 or dealer_sum == 21 or dealer_sum > 21 or sum(player) > 21:
                 user = str(input("\nPlay again?\n Yes or No?\n please type y or n: "))
@@ -215,32 +230,3 @@ def main():
             
 if __name__ == '__main__':
     main()
-
-
-
-"""
-OLD TESTING CODE:
-while True:
-        black = game()
-        user, surrender, flag = 0, 0, 0
-        shuffle_deck, player, dealer = black.first_dealing()
-        print("deck: ", shuffle_deck, "\n")
-        hand_one, hand_two = [], []
-        while flag == 0 and surrender == 0:
-            flag, surrender, hand_one, hand_two, player, shuffle_deck, user = black.PlayerAction(shuffle_deck, player, flag, surrender)
-            print("deck: ", shuffle_deck, "\n")
-            print("player: ", flag, surrender, hand_one, hand_two, player)
-            dealer_sum, dealer, shuffle_deck = black.DealerAction(shuffle_deck, dealer)
-            print("dealer: ", dealer_sum, dealer, "\n")
-            print("deck: ", shuffle_deck, "\n")
-            black.WinLose(user, flag, surrender, dealer_sum, player, hand_one, hand_two)
-            if flag == 1 or surrender == 1 or dealer_sum == 21 or dealer_sum > 21 or sum(player) > 21:
-                user = int(input("Play again?\ntype in the corresponding action's number\n1.) Yes or 2.) No: "))
-                if user == 1:
-                    break
-                elif user == 2:
-                    print("Thank you for playing, closing game in 10 seconds")
-                    print("Closing...")
-                    time.sleep(10)
-                    raise SystemExit
-"""
